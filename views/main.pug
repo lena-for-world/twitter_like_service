@@ -23,10 +23,12 @@ block content
             input.twit-user-id(type='hidden' value=twit.user.id)
             input.twit-id(type='hidden' value=twit.id)
             .twit-author= twit.user.nick
-            -console.log(user);
-            -const follow = user && user.Followings.map(f => f.id).includes(twit.user.id);
-            if user && user.id !== twit.user.id
+            -const follow = user && user.Followings.map(f => f.id).includes(twit.user.id); // user가 팔로잉 중인지 확인
+            -console.log(follow);
+            if user && user.id !== twit.user.id && !follow
               button.twit-follow 팔로우하기
+            else if user && user.id !== twit.user.id && follow
+              button.twit-unfollow 팔로우중
             .twit-content= twit.content
             if twit.img
               .twit-img
@@ -58,19 +60,42 @@ block content
             if (myId) {
             const userId = tag.parentNode.querySelector('.twit-user-id').value;
             if (userId !== myId.value) {
-                if (confirm('팔로잉하시겠습니까?')) {
-                var xhr = new XMLHttpRequest();
-                xhr.onload = function() {
-                    if(xhr.status === 200) {
+                if (confirm('팔로우하시겠습니까?')) {
+                  var xhr = new XMLHttpRequest();
+                  xhr.onload = function() {
+                    // db에 결과를 저장해야 새로고침해도 '팔로 중' UI가 유지될듯
+                    // ... 이렇게 생각했지만... 그냥 위에서 follow여부를 확인해서 다른 버튼을 띄워주면 될 일이었음
+                    // 생각을 좀 간단히 하자
+                      if(xhr.status === 200) {
                         location.reload();
-                    } else {
-                        console.error(xhr.responseText);
-                    }
-                };
-                xhr.open('POST', '/user/' + userId + '/follow');
-                xhr.send();
+                      } else {
+                          console.error(xhr.responseText);
+                      }
+                  };
+                  xhr.open('POST', '/user/' + userId + '/follow');
+                  xhr.send();
                 }
             }
           }
+        });
+      });
+      document.querySelectorAll('.twit-unfollow').forEach(function(tag) {
+        tag.addEventListener('click', function() {
+          const myId = document.querySelector('#my-id');
+            if (myId) {
+              const userId = tag.parentNode.querySelector('.twit-user-id').value;
+              if (confirm('언팔로우하시겠습니까?')) {
+                var xhr = new XMLHttpRequest();
+                xhr.onload = function() {
+                  if(xhr.status === 200) {
+                    location.reload();
+                  } else {
+                      console.error(xhr.responseText);
+                  }
+              };
+                  xhr.open('POST', '/user/' + userId + '/unfollow');
+                  xhr.send();
+                }
+            }
         });
       });
