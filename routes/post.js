@@ -3,10 +3,13 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { Post, Hashtag, User } = require('../models');
 const { isLoggedIn } = require('./middlewares');
+const { Post, Hashtag, User } = require('../models');
 
 const router = express.Router();
+
+
+
 fs.readdir('uploads', (error) => {
     if(error) {
         console.error('uploads 폴더가 없어 uploads 폴더를 생성합니다');
@@ -72,6 +75,23 @@ router.get('/hashtag', async(req, res, next) => {
     } catch(error) {
         console.error(error);
         return next(error);
+    }
+});
+
+router.post('/:id/kudo', async(req, res, next) => {
+    try {
+        // 모든 Post들에 Fan이라는 항목이 추가된 것을 확인함
+        // 이 Fan이... 뭐냐... user리스트...인듯...!!
+        const fan = await Post.findAll({ include: 'Fan' } );
+        console.log(fan);
+        const post = await Post.findAll({
+            where: { id: req.params.id },
+        });
+        await post.addUser(req.user.id);
+        res.send('success');
+    } catch(error) {
+        console.error(error);
+        next(error);
     }
 });
 
