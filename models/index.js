@@ -30,6 +30,7 @@ db.User.belongsToMany(db.User, {
   through: 'Follow',
 });
 
+// 수정
 db.Post.belongsToMany(db.User, {
   through: 'Kudo',
   as: 'Fan',

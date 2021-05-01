@@ -81,7 +81,7 @@ router.get('/hashtag', async(req, res, next) => {
 router.post('/:id/kudo', async(req, res, next) => {
     try {
         // 모든 Post들에 Fan이라는 항목이 추가된 것을 확인함
-        // 이 Fan이... 뭐냐... user리스트...인듯...
+        // 이 Fan이... 뭐냐... user리스트...인듯...!!
         const fan = await Post.findAll({ include: 'Fan' } );
         console.log(fan);
         const post = await Post.findAll({

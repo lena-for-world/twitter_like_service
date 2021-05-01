@@ -27,6 +27,7 @@ router.get('/join', isNotLoggedIn, (req, res) => {
     });
 });
 
+// 수정
 router.get('/', (req,res,next) => {
     Post.findAll({
         include: [{
