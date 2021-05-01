@@ -24,7 +24,6 @@ block content
             input.twit-id(type='hidden' value=twit.id)
             .twit-author= twit.user.nick
             -const follow = user && user.Followings.map(f => f.id).includes(twit.user.id); // user가 팔로잉 중인지 확인
-            -console.log(follow);
             if user && user.id !== twit.user.id && !follow
               button.twit-follow 팔로우하기
             else if user && user.id !== twit.user.id && follow
@@ -33,6 +32,9 @@ block content
             if twit.img
               .twit-img
                 img(src=twit.img alt='섬네일')
+            -const like = twit && twit.Fan.map(l => l.id).includes(user.id);
+            if !like
+              button.twit-kudo 좋아요
   script.
       if (document.getElementById('img')) {
       document.getElementById('img').addEventListener('change', function(e) {
@@ -97,5 +99,23 @@ block content
                   xhr.send();
                 }
             }
+        });
+      });
+      document.querySelectorAll('.twit-kudo').forEach(function(tag) {
+        tag.addEventListener('click', function() {
+          const myId = document.querySelector('#my-id').value;
+          const twitId = tag.parentNode.querySelector('.twit-id').value;
+          if(confirm('좋아요를 누를까요?')) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+              if(xhr.status == 200) {
+                location.reload();
+              } else {
+                console.error(xhr.responseText);
+              }
+            };
+            xhr.open('POST', '/post/' + twitId + '/kudo');
+            xhr.send();
+          }
         });
       });
