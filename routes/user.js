@@ -36,7 +36,6 @@ router.post('/:id/profileMessage', isLoggedIn, async(req, res, next) => {
 router.post('/:id/follow', isLoggedIn, async(req, res, next) => {
     try {
         const user = await User.findOne({ where: {id: req.user.id} , include: ['Followings'] });
-        console.log(user);
         if (user) {
            // user의 following에 insert
             await user.addFollowings(parseInt(req.params.id, 10));

@@ -28,6 +28,8 @@ block content
               button.twit-follow 팔로우하기
             else if user && user.id !== twit.user.id && follow
               button.twit-unfollow 팔로우중
+            if user && user.id === twit.user.id
+              button.twit-delete 삭제
             .twit-content= twit.content
             if twit.img
               .twit-img
@@ -135,6 +137,23 @@ block content
               }
             };
             xhr.open('DELETE', '/post/' + twitId + '/unkudo');
+            xhr.send();
+          }
+        });
+      });
+      document.querySelectorAll('.twit-delete').forEach(function(tag) {
+        tag.addEventListener('click', function() {
+          const twitId = tag.parentNode.querySelector('.twit-id').value;
+          if(confirm('트윗을 삭제할까요?')) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+              if(xhr.status == 200) {
+                location.reload();
+              } else {
+                console.error(xhr.responseText);
+              }
+            };
+            xhr.open('POST', '/post/' + twitId);
             xhr.send();
           }
         });
