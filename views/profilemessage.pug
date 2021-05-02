@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  .timeline
+    .container
+      .profile-wrap
+      .profile
+        if user && user.id
+            form#user-form(action='/user/'+user.id+'/profileMessage' method='post')
+              .input-group
+                label(for='user-nick') 닉네임
+                input#user-name(type='text' placeholder=user.nick name='nick')
+              .input-group
+                label(for='user-status') 상태메시지
+                input#user-message(type='text' placeholder=user.statusMessage name='message')
+              button.editEnd(type='submit') 수정완료

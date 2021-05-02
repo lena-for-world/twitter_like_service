@@ -11,7 +11,8 @@ html
       .profile-wrap
       .profile
         if user && user.id
-            .user-name= '안녕하세요! ' + user.nick + '님'
+            .user-name= user.nick
+            #user-message= user.statusMessage
             .half
               div 팔로잉
               .count.following-count= user.Followings && user.Followings.length || 0
@@ -20,6 +21,7 @@ html
               .count.follower-count= user.Followers && user.Followers.length || 0
             input#my-id(type='hidden' value=user.id)
             a#my-profile.btn(href='/profile') 내 프로필
+            a#profile-edit.btn(href='/profilemessage') 프로필 수정
             a#logout.btn(href='/auth/logout') 로그아웃
         else
           form#login-form(action='/auth/login' method='post')
@@ -37,4 +39,5 @@ html
         footer
           | Made by&nbsp;
           a(href='https://www.zerocho.com' target='_blank') ZeroCho
+          |  , Edit by Ryun-ah K   
       block content

@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(30),
             allowNull: true,
         },
+        statusMessage: {
+            type:DataTypes.STRING(50),
+            allowNull: true,
+        },
     }, {
         timestamps: true,
         paranoid: true,
