@@ -61,8 +61,6 @@ router.post('/:id', isLoggedIn, async(req, res, next) => {
         const post = await Post.findOne({
             where: {id: req.params.id}
         });
-        // post에서 user 정보만 삭제 하게 됨... 그래서 오류가 남!
-        // 그냥 트윗 자체를 삭제하려면?
         await post.destroy();
         res.redirect('/');
     } catch(error) {
