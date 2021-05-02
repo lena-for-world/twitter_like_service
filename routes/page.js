@@ -19,6 +19,13 @@ router.get('/profile', isLoggedIn, (req,res) => {
     });
 });
 
+router.get('/profileMessage', isLoggedIn, (req,res) => {
+    res.render('profilemessage', {
+        title: '내 정보 수정 - NodeBird',
+        user: req.user,
+    });
+});
+
 router.get('/join', isNotLoggedIn, (req, res) => {
     res.render('join', {
         title: '회원가입 - NodeBird',
