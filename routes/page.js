@@ -30,14 +30,15 @@ router.get('/join', isNotLoggedIn, (req, res) => {
 // 수정
 router.get('/', (req,res,next) => {
     Post.findAll({
-        include: [{
+         include: [{
             model: User,
             attributes: ['id', 'nick'],
-            as: 'Fan',
-        }, {
+        },
+        {
             model: User,
             attributes: ['id', 'nick'],
-        }
+            as: 'Liker',
+       }
     ],
         order: [['createdAt', 'DESC']],
     })

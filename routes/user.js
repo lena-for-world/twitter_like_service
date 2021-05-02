@@ -10,10 +10,10 @@ const router = express.Router();
 // 
 router.post('/:id/follow', isLoggedIn, async(req, res, next) => {
     try {
-        const user = await User.findOne({ where: {id: req.user.id } });
+        const user = await User.findOne({ where: {id: req.user.id} , include: ['Followings'] });
         console.log(user);
         if (user) {
-            // user의 following에 insert
+           // user의 following에 insert
             await user.addFollowings(parseInt(req.params.id, 10));
             res.send('success');
           } else {
