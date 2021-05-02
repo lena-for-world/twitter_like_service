@@ -56,6 +56,21 @@ router.post('/', isLoggedIn, upload2.none(), async(req,res, next) => {
     }
 });
 
+router.post('/:id', isLoggedIn, async(req, res, next) => {
+    try{
+        const post = await Post.findOne({
+            where: {id: req.params.id}
+        });
+        // post에서 user 정보만 삭제 하게 됨... 그래서 오류가 남!
+        // 그냥 트윗 자체를 삭제하려면?
+        await post.destroy();
+        res.redirect('/');
+    } catch(error) {
+        console.error(error);
+        next(error);
+    }
+});
+
 router.get('/hashtag', async(req, res, next) => {
     const query = req.query.hashtag;
     if(!query) {
@@ -81,7 +96,6 @@ router.get('/hashtag', async(req, res, next) => {
 router.post('/:id/kudo', async(req, res, next) => {
     try {
        const post = await Post.findOne({where: {id: req.params.id } });
-        console.log(post);
        await post.addLiker(req.user.id, req.params.id);
         // const temp = await Post.findOne({ include: 'Fan'});
         res.send('success');
@@ -97,7 +111,6 @@ router.delete('/:id/unkudo', async(req, res, next) => {
            where: {id: req.params.id },
            include: ['Liker']
         });
-        console.log(post);
         //await post.removeLiker(req.user.id, req.params.id);
         await post.setLiker([]);
         // const temp = await Post.findOne({ include: 'Fan'});
