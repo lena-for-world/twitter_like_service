@@ -80,14 +80,27 @@ router.get('/hashtag', async(req, res, next) => {
 
 router.post('/:id/kudo', async(req, res, next) => {
     try {
-        // 모든 Post들에 Fan이라는 항목이 추가된 것을 확인함
-        // 이 Fan이... 뭐냐... user리스트...인듯...!!
-        const fan = await Post.findAll({ include: 'Fan' } );
-        console.log(fan);
-        const post = await Post.findAll({
-            where: { id: req.params.id },
+       const post = await Post.findOne({where: {id: req.params.id } });
+        console.log(post);
+       await post.addLiker(req.user.id, req.params.id);
+        // const temp = await Post.findOne({ include: 'Fan'});
+        res.send('success');
+    } catch(error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+router.delete('/:id/unkudo', async(req, res, next) => {
+    try {
+        const post = await Post.findOne({
+           where: {id: req.params.id },
+           include: ['Liker']
         });
-        await post.addUser(req.user.id);
+        console.log(post);
+        //await post.removeLiker(req.user.id, req.params.id);
+        await post.setLiker([]);
+        // const temp = await Post.findOne({ include: 'Fan'});
         res.send('success');
     } catch(error) {
         console.error(error);

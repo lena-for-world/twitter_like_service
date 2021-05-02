@@ -33,7 +33,7 @@ db.User.belongsToMany(db.User, {
 // 수정
 db.Post.belongsToMany(db.User, {
   through: 'Kudo',
-  as: 'Fan',
+  as: 'Liker'
 });
 db.User.belongsToMany(db.Post, {
   through: 'Kudo',
